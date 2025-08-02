@@ -1,0 +1,47 @@
+{
+  // ファイルの共通設定
+  "files.eol": "\n",
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+
+  // Java言語設定
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "java.compile.nullAnalysis.mode": "automatic",
+  "java.saveActions.organizeImports": true,
+  "java.sources.organizeImports.staticStarThreshold": 99,
+  "java.sources.organizeImports.starThreshold": 99,
+
+  // Google Java Styleフォーマット設定
+  "java.format.settings.url": "${workspaceFolder}/config/fmt/eclipse-java-google-style.xml",
+  "java.format.settings.profile": "GoogleStyle",
+  "java.format.enabled": true,
+  "java.format.onType.enabled": true,
+
+  // エディタ設定
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.renderWhitespace": "all",
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": false,
+  "editor.formatOnType": false,
+
+  // Java拡張機能の設定
+  "[java]": {
+    "editor.defaultFormatter": "redhat.java",
+    "editor.suggest.snippetsPreventQuickSuggestions": false,
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
+  },
+
+  // xml拡張機能の設定
+  "[xml]": {
+    "editor.defaultFormatter": "redhat.vscode-xml",
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.formatOnSave": false
+  },
+  "xml.format.joinContentLines": false,
+  "xml.format.grammarAwareFormatting": false
+}

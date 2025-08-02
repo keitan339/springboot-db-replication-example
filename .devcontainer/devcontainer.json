@@ -1,0 +1,51 @@
+{
+  "name": "springboot-db-replication-example",
+
+  // DockerComposeのファイルパス
+  "dockerComposeFile": ["./docker-compose.yml"],
+
+  // デフォルトのPortForwarding
+  "forwardPorts": [22, 8080, "pgadmin:80"],
+  "portsAttributes": {
+    "22": {
+      "label": "ssh"
+    },
+    "8080": {
+      "label": "spring-boot"
+    },
+    "pgadmin:80": {
+      "label": "pgadmin"
+    }
+  },
+
+  // ホスト側とコンテナ側の環境を合わせるためにenvファイルを作成
+  "initializeCommand": "./.devcontainer/env.sh",
+
+  // VSCodeの接続先サービス
+  "service": "dev",
+
+  // ワークスペースのマウント設定
+  "workspaceFolder": "/workspace",
+
+  // IDE用のカスタマイズ設定
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscode-icons-team.vscode-icons",
+        "esbenp.prettier-vscode",
+        "eamodio.gitlens",
+        "vscjava.vscode-java-pack",
+        "vmware.vscode-boot-dev-pack",
+        "redhat.vscode-xml",
+        "Anthropic.claude-code",
+        "wayou.vscode-todo-highlight",
+        "ms-azuretools.vscode-docker",
+        "ms-azuretools.vscode-containers"
+      ],
+      // VSCodeの設定 (settings.json)
+      "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash" // デフォルトシェル
+      }
+    }
+  }
+}

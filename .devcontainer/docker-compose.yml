@@ -1,0 +1,64 @@
+services:
+  dev:
+    build:
+      context: ./dev
+      dockerfile: Dockerfile
+      args:
+        USER_NAME: developer
+        USER_UID: ${HOST_UID}
+        USER_GID: ${HOST_GID}
+        GIT_USER_NAME: ${GIT_USER_NAME}
+        GIT_USER_EMAIL: ${GIT_USER_EMAIL}
+        DOCKER_GID: ${HOST_DOCKER_GID}
+
+        JAVA_VERSION: 21
+        MAVEN_VERSION: 3.9.10
+        GRADLE_VERSION: 8.14.3
+        NODE_VERSION: 22.17.0
+
+    user: ${HOST_UID}
+    volumes:
+      - ..:/workspace:cached
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${SSH_AUTH_SOCK}:/tmp/ssh-agent.sock
+      - ${GIT_HUB_CONFIG_DIRECTORY}:/home/developer/.config/gh
+      - claude-data:/home/developer/.claude
+    privileged: true
+
+  db_primary:
+    image: postgres:17.5
+    command: -c "hba_file=/etc/postgresql/pg_hba.conf"
+    environment:
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - db_primary_data:/var/lib/postgresql/data
+      - ./db_primary/pg_hba.conf:/etc/postgresql/pg_hba.conf
+      - ./db_primary/init.sh:/docker-entrypoint-initdb.d/init.sh
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+
+  db_read_replica:
+    image: postgres:17.5
+    entrypoint: /etc/postgresql/entrypoint.sh
+    volumes:
+      - db_read_replica_data:/var/lib/postgresql/data
+      - ./db_read_replica/entrypoint.sh:/etc/postgresql/entrypoint.sh
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+    depends_on:
+      db_primary:
+        condition: service_healthy
+
+  pgadmin:
+    image: dpage/pgadmin4:9.6
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=test@example.com
+      - PGADMIN_DEFAULT_PASSWORD=password
+
+volumes:
+  claude-data:
+  db_primary_data:
+  db_read_replica_data:
+  pgadmin_data:

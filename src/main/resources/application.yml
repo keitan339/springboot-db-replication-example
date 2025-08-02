@@ -1,0 +1,48 @@
+spring:
+  application:
+    name: springboot-db-replication
+
+  # Primary DB 設定
+  datasource:
+    primary:
+      jdbc-url: jdbc:postgresql://db_primary:5432/postgres
+      username: postgres
+      password: password
+      driver-class-name: org.postgresql.Driver
+      hikari:
+        pool-name: PrimaryPool
+        maximum-pool-size: 10
+        minimum-idle: 5
+        connection-timeout: 30000
+        idle-timeout: 600000
+        max-lifetime: 1800000
+
+    # Read Replica DB 設定
+    read-replica:
+      jdbc-url: jdbc:postgresql://db_read_replica:5432/postgres
+      username: postgres
+      password: password
+      driver-class-name: org.postgresql.Driver
+      hikari:
+        pool-name: ReadReplicaPool
+        maximum-pool-size: 10
+        minimum-idle: 5
+        connection-timeout: 30000
+        idle-timeout: 600000
+        max-lifetime: 1800000
+
+  sql:
+    init:
+      mode: always
+      schema-locations:
+        - classpath:db/schema.sql
+      data-locations:
+        - classpath:db/data.sql
+
+# MyBatis 設定
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    default-fetch-size: 100
+    default-statement-timeout: 30

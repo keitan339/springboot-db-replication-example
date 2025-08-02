@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springboot.db.replication.mapper.MessageJohoMapper">
+
+  <!-- ResultMap定義 -->
+  <resultMap id="BaseResultMap" type="com.example.springboot.db.replication.entity.MessageJoho">
+    <id column="no" jdbcType="INTEGER" property="no" />
+    <result column="message" jdbcType="VARCHAR" property="message" />
+  </resultMap>
+
+  <!-- カラムリスト -->
+  <sql id="Base_Column_List">
+    no, message
+  </sql>
+
+  <!-- 読み取り系メソッド（Primary/ReadReplica共通） -->
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+      <include refid="Base_Column_List" />
+    from
+      t_message_joho where no = #{no,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+      <include refid="Base_Column_List" />
+    from
+      t_message_joho
+    order by
+      no
+  </select>
+
+  <select id="count" resultType="long">
+    select
+      count(*)
+    from
+      t_message_joho
+  </select>
+
+  <!-- 更新系メソッド（Primary専用） -->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete
+    from
+      t_message_joho
+    where
+      no = #{no,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" keyColumn="no" keyProperty="no"
+    parameterType="com.example.springboot.db.replication.entity.MessageJoho" useGeneratedKeys="true">
+    insert
+    into
+      t_message_joho
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="message != null"> message, </if>
+    </trim>
+    <trim prefix="values (" suffix=")"
+      suffixOverrides=",">
+      <if test="message != null"> #{message,jdbcType=VARCHAR}, </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKey"
+    parameterType="com.example.springboot.db.replication.entity.MessageJoho">
+    update
+      t_message_joho
+    set
+      message = #{message,jdbcType=VARCHAR}
+    where
+      no = #{no,jdbcType=INTEGER}
+  </update>
+</mapper>

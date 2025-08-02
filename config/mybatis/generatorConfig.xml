@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+  <!-- コンテキスト設定 -->
+  <context id="PostgreSQLTables" targetRuntime="MyBatis3">
+
+    <!-- テーブル名を大文字で指定可能に -->
+    <property name="delimitIdentifiers" value="true" />
+
+    <!-- プラグイン設定 -->
+    <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin" />
+    <plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
+    <plugin type="org.mybatis.generator.plugins.ToStringPlugin" />
+
+    <!-- コメント生成設定 -->
+    <commentGenerator>
+      <property name="suppressAllComments" value="true" />
+      <property name="suppressDate" value="true" />
+    </commentGenerator>
+
+    <!-- DB接続設定（Primary DB） -->
+    <jdbcConnection driverClass="org.postgresql.Driver"
+      connectionURL="jdbc:postgresql://db_primary:5432/postgres"
+      userId="postgres"
+      password="password">
+      <property name="nullCatalogMeansCurrent" value="true" />
+      <property name="remarks" value="true" />
+      <property name="useInformationSchema" value="true" />
+    </jdbcConnection>
+
+    <!-- JavaタイプResolver設定 -->
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false" />
+    </javaTypeResolver>
+
+    <!-- Entity生成設定 -->
+    <javaModelGenerator targetPackage="com.example.springboot.db.replication.entity"
+      targetProject="src/main/java">
+      <property name="enableSubPackages" value="true" />
+      <property name="trimStrings" value="true" />
+    </javaModelGenerator>
+
+    <!-- SQLマップファイル生成設定 -->
+    <sqlMapGenerator targetPackage="mapper"
+      targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true" />
+    </sqlMapGenerator>
+
+    <!-- Mapperインターフェース生成設定 -->
+    <javaClientGenerator type="XMLMAPPER"
+      targetPackage="com.example.springboot.db.replication.mapper"
+      targetProject="src/main/java">
+      <property name="enableSubPackages" value="true" />
+    </javaClientGenerator>
+
+    <!-- テーブル設定 -->
+    <table tableName="TABLE_A" domainObjectName="TableA" enableCountByExample="false"
+      enableUpdateByExample="false" enableDeleteByExample="false"
+      enableSelectByExample="false" selectByExampleQueryId="false">
+      <property name="useActualColumnNames" value="false" />
+      <generatedKey column="COL_A" sqlStatement="JDBC" identity="true" />
+    </table>
+  </context>
+</generatorConfiguration>
