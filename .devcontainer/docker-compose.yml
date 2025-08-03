@@ -26,23 +26,22 @@ services:
     privileged: true
 
   db_primary:
-    image: postgres:17.5
-    command: -c "hba_file=/etc/postgresql/pg_hba.conf"
+    build:
+      context: ./db_primary
+      dockerfile: Dockerfile
     environment:
       - POSTGRES_PASSWORD=password
     volumes:
       - db_primary_data:/var/lib/postgresql/data
-      - ./db_primary/pg_hba.conf:/etc/postgresql/pg_hba.conf
-      - ./db_primary/init.sh:/docker-entrypoint-initdb.d/init.sh
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres"]
 
   db_read_replica:
-    image: postgres:17.5
-    entrypoint: /etc/postgresql/entrypoint.sh
+    build:
+      context: ./db_read_replica
+      dockerfile: Dockerfile
     volumes:
       - db_read_replica_data:/var/lib/postgresql/data
-      - ./db_read_replica/entrypoint.sh:/etc/postgresql/entrypoint.sh
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres"]
     depends_on:
